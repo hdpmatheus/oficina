@@ -1,0 +1,20 @@
+[
+  {
+    "descricao": "Agendamento de serviço: Troca de pneus",
+    "valor": 200.0,
+    "data": {
+      "dia": 25,
+      "mes": 4,
+      "ano": 2025
+    }
+  },
+  {
+    "descricao": "Agendamento de serviço: Diagnostico eletronico",
+    "valor": 80.0,
+    "data": {
+      "dia": 4,
+      "mes": 6,
+      "ano": 2025
+    }
+  }
+]

@@ -1,0 +1,85 @@
+[
+  {
+    "dataAgendamento": {
+      "dia": 25,
+      "mes": 4,
+      "ano": 2025
+    },
+    "dataConfirmacao": {
+      "dia": 4,
+      "mes": 6,
+      "ano": 2025
+    },
+    "idCliente": 1,
+    "idServico": 5,
+    "funcionario": {
+      "id": 1,
+      "senha": 12345,
+      "cargo": "Mecanico",
+      "nome": "Boquita",
+      "endereco": "Campo Tijuco, 45",
+      "telefone": 3890101
+    },
+    "idElevador": -1,
+    "nomeEstadoSalvo": "Finalizado"
+  },
+  {
+    "dataAgendamento": {
+      "dia": 4,
+      "mes": 6,
+      "ano": 2025
+    },
+    "dataConfirmacao": {
+      "dia": 4,
+      "mes": 6,
+      "ano": 2025
+    },
+    "idCliente": 4,
+    "idServico": 7,
+    "funcionario": {
+      "id": 1,
+      "senha": 12345,
+      "cargo": "Mecanico",
+      "nome": "Boquita",
+      "endereco": "Campo Tijuco, 45",
+      "telefone": 3890101
+    },
+    "idElevador": -1,
+    "veiculo": {
+      "placa": "jojotodynho",
+      "modelo": "bravo",
+      "marca": "fiat",
+      "ano": 2017,
+      "tipo": "hatch",
+      "cor": "branca"
+    },
+    "nomeEstadoSalvo": "Confirmado"
+  },
+  {
+    "dataAgendamento": {
+      "dia": 3,
+      "mes": 6,
+      "ano": 2025
+    },
+    "idCliente": 4,
+    "idServico": 7,
+    "funcionario": {
+      "id": 1,
+      "senha": 12345,
+      "cargo": "Mecanico",
+      "nome": "Boquita",
+      "endereco": "Campo Tijuco, 45",
+      "telefone": 3890101
+    },
+    "idElevador": 0,
+    "veiculo": {
+      "placa": "jojotodynho",
+      "modelo": "bravo",
+      "marca": "fiat",
+      "ano": 2017,
+      "tipo": "hatch",
+      "cor": "branca"
+    },
+    "nomeEstadoSalvo": "Agendado"
+  }
+]

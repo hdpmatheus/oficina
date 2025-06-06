@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "senha": 12345,
+    "cargo": "Mecanico",
+    "nome": "Boquita",
+    "endereco": "Campo Tijuco, 45",
+    "telefone": 3890101
+  }
+]

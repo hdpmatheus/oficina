@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "exclusivoAlinhamento": false,
+    "ocupado": true
+  },
+  {
+    "id": 2,
+    "exclusivoAlinhamento": false,
+    "ocupado": true
+  },
+  {
+    "id": 3,
+    "exclusivoAlinhamento": true,
+    "ocupado": false
+  }
+]

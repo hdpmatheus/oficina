@@ -1,0 +1,22 @@
+[
+  {
+    "tipo": "Compra de materiais",
+    "valor": 500.0,
+    "descricao": "Gerente",
+    "dataDespesa": {
+      "dia": 1,
+      "mes": 1,
+      "ano": 2025
+    }
+  },
+  {
+    "tipo": "Motor toro",
+    "valor": 2300.0,
+    "descricao": "Gerente",
+    "dataDespesa": {
+      "dia": 4,
+      "mes": 6,
+      "ano": 2025
+    }
+  }
+]

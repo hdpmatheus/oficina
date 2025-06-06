@@ -1,0 +1,69 @@
+[
+  {
+    "idCliente": 1,
+    "cpf": 110951,
+    "veiculos": [
+      {
+        "placa": "xx12",
+        "modelo": "Fiat Toro",
+        "marca": "Fiat",
+        "ano": 2023,
+        "tipo": "caminhonete",
+        "cor": "Branco"
+      },
+      {
+        "placa": "FELPSLOVE",
+        "modelo": "X6",
+        "marca": "BMW",
+        "ano": 2025,
+        "tipo": "SUV",
+        "cor": "Azul"
+      }
+    ],
+    "nome": "Livia",
+    "endereco": "Rua anto",
+    "telefone": 21999
+  },
+  {
+    "idCliente": 2,
+    "cpf": 110,
+    "veiculos": [
+      {
+        "placa": "xxx",
+        "modelo": "Fiat Toro",
+        "marca": "Fiat",
+        "ano": 2023,
+        "tipo": "Caminhonete",
+        "cor": "Branca"
+      }
+    ],
+    "nome": "Felps",
+    "endereco": "Rua antonio",
+    "telefone": 31000
+  },
+  {
+    "idCliente": 3,
+    "cpf": 1212,
+    "veiculos": [],
+    "nome": "Matheus",
+    "endereco": "Campo Tijuco",
+    "telefone": 31313
+  },
+  {
+    "idCliente": 4,
+    "cpf": 100022,
+    "veiculos": [
+      {
+        "placa": "jojotodynho",
+        "modelo": "bravo",
+        "marca": "fiat",
+        "ano": 2017,
+        "tipo": "hatch",
+        "cor": "branca"
+      }
+    ],
+    "nome": "Pedro Monteiro",
+    "endereco": "Lab th hugo",
+    "telefone": 38919191
+  }
+]

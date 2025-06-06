@@ -1,0 +1,415 @@
+package oficina;
+
+import Adapter.PagamentoAdapter;
+import Adapter.ProcessadorPagamento;
+import Adapter.SistemaExterno;
+import Comparator.AgendamentoCpfComparator;
+import Controler.BalancoMensal;
+import Controler.ControleDeAcesso;
+import Controler.GerenciarCliente;
+import Controler.GerenciarServico;
+import Controler.GerenciarFuncionario;
+import Controler.GerenciarGerente;
+import Entidades.Agendamento;
+import Entidades.Cliente;
+import Entidades.Data;
+import Entidades.Estoque;
+import Entidades.Funcionario;
+import Entidades.Gerente;
+import Entidades.Veiculo;
+import Entidades.Elevador;
+import Entidades.Produto;
+import Entidades.Servico;
+import Entidades.Venda;
+import Json.Jsonagendamento;
+import Json.Jsonvenda;
+import Json.Jsonelevador;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class SistemaCentral {
+
+    private GerenciarCliente gerenciarCliente;
+    private GerenciarServico gerenciarServico;
+    private Estoque estoque;
+    private GerenciarFuncionario gerenciarFuncionario;
+    private GerenciarGerente gerenciarGerente;
+    private ProcessadorPagamento processadorPagamento;
+    private ControleDeAcesso controledeacesso;
+    private BalancoMensal balancomensal;
+    private Login login;
+    private static Elevador[] elevadores = new Elevador[3];
+
+    protected static int contadorClientes = 0;
+    private static int contadorProdutos = 0;
+
+    private List<Agendamento> listaAgendamentos;
+    private List<Venda> listaVendas;
+    private List<Servico> servicosPadrao = new ArrayList<>();
+
+    SistemaExterno sistemaexterno = new SistemaExterno();
+
+    public SistemaCentral() {
+        this.gerenciarCliente = new GerenciarCliente();
+        this.gerenciarServico = new GerenciarServico();
+        this.gerenciarFuncionario = new GerenciarFuncionario();
+        this.gerenciarGerente = new GerenciarGerente();
+        this.estoque = new Estoque();
+        this.listaAgendamentos = Jsonagendamento.carregarAgendamentos();
+        this.listaVendas = new ArrayList<>();
+        this.processadorPagamento = new PagamentoAdapter(sistemaexterno);
+        this.controledeacesso = new ControleDeAcesso(gerenciarFuncionario);
+        this.login = new Login(gerenciarFuncionario, gerenciarGerente);
+        this.balancomensal = new BalancoMensal(estoque, gerenciarServico, login);
+        
+        elevadores = Jsonelevador.carregarElevadores();
+        if(elevadores == null || elevadores.length == 0){
+            inicializarElevadores();
+        }
+        
+    }
+        private void inicializarElevadores(){
+            elevadores = new Elevador [3];
+            elevadores[0] = new Elevador(1, false); // Uso geral
+            elevadores[1] = new Elevador(2, false); // Uso geral
+            elevadores[2] = new Elevador(3, true);  // Exclusivo para Alinhamento e Balanceamento
+        }
+        
+        public void exibirTotalDeVeiculos(){
+            System.out.println("Total de veiculos (encapsulado): " + Veiculo.getContadorVeiculosEncapsulado());
+            System.out.println("Total de veículos (protegido): " + Veiculo.getContadorVeiculosProtegido());
+        }
+
+    public GerenciarCliente getGerenciarCliente() { return gerenciarCliente; }
+    public GerenciarServico getGerenciarServico() { return gerenciarServico; }
+    public Estoque getEstoque() { return estoque; }
+    public GerenciarFuncionario getGerenciarFuncionario() { return gerenciarFuncionario; }
+    public GerenciarGerente getGerenciarGerente() { return gerenciarGerente; }
+    public static int getContadorClientes() { return contadorClientes; }
+    public static int getContadorProdutos() { return contadorProdutos; }
+    public static void incrementarContadorClientes() { contadorClientes++; }
+    public static void incrementarContadorProdutos() { contadorProdutos++; }
+    public BalancoMensal getBalancomensal() { return balancomensal; }
+    public ControleDeAcesso getControleDeAcesso() { return controledeacesso; }
+
+    public void realizarVenda(int idCliente, int idProduto, int quantidade, ProcessadorPagamento pagamento, Data dataVenda) {
+        Cliente cliente = gerenciarCliente.buscarCliente(idCliente);
+        if (cliente == null) {
+            System.out.println("Cliente nao encontrado.");
+            return;
+        }
+
+        Produto produto = estoque.buscarProduto(idProduto);
+        if (produto == null) {
+            System.out.println("Produto nao encontrado.");
+            return;
+        }
+
+        if (produto.getQuantidade() < quantidade) {
+            System.out.println("Quantidade solicitada nao disponivel no estoque.");
+            return;
+        }
+
+        estoque.removerQuantidade(idProduto, quantidade);
+        double total = produto.getPreco() * quantidade;
+
+        if (pagamento.realizarPagamento(total, idCliente)) {
+            Venda venda = new Venda(idCliente, idProduto, quantidade, dataVenda);
+            listaVendas.add(venda);
+            balancomensal.adicionarReceitaVenda(venda);
+            System.out.println("Venda realizada com sucesso! " + dataVenda + ", Cliente: " + cliente.getNome() + ", Produto: " + produto.getNome() + ", Total: R$ " + total);
+        } else {
+            System.out.println("Falha ao processar pagamento.");
+        }
+    }
+
+    public void salvarVenda() {
+        Jsonvenda.salvarVendas(listaVendas);
+    }
+
+    public void criarPreAgendamento(int idCliente, int servicoId, Data dataAgendamento, int funcionarioId, Veiculo veiculo) {
+        Cliente cliente = gerenciarCliente.buscarCliente(idCliente);
+        if (cliente == null) {
+            System.out.println("Cliente nao encontrado.");
+            return;
+        }
+
+        Servico servico = gerenciarServico.buscarServicoPorId(servicoId);
+        if (servico == null) {
+            System.out.println("Servico nao encontrado.");
+            return;
+        }
+
+        Funcionario funcionario = gerenciarFuncionario.buscarFuncionario(funcionarioId);
+        if (funcionario == null) {
+            System.out.println("Funcionario nao encontrado.");
+            return;
+        }
+
+        Agendamento agendamentoExistente = buscarAgendamentoPorIdCliente(idCliente);
+        if (agendamentoExistente != null && agendamentoExistente.getDataAgendamento().equals(dataAgendamento)) {
+            System.out.println("Ja existe um agendamento para este cliente na mesma data.");
+            return;
+        }
+
+        Agendamento agendamento = new Agendamento(dataAgendamento, null, idCliente, servicoId, funcionario);
+        listaAgendamentos.add(agendamento);
+        agendamento.setVeiculo(veiculo);
+        System.out.println("Pre-agendamento realizado com sucesso para " + cliente.getNome() + " no servico " + servico.getTipoServico() + " no dia: " + dataAgendamento); 
+    }
+
+    public Agendamento buscarAgendamentoPorIdCliente(int idCliente) {
+        Agendamento agendamentoBuscado = new Agendamento(null, null, idCliente, 0, null);
+        Collections.sort(listaAgendamentos, new AgendamentoCpfComparator());
+        int index = Collections.binarySearch(listaAgendamentos, agendamentoBuscado, new AgendamentoCpfComparator());
+        return (index >= 0) ? listaAgendamentos.get(index) : null;
+    }
+
+    public void confirmarAgendamento(int idCliente, Data dataConfirmacao) {
+        Agendamento agendamento = buscarAgendamentoPorIdCliente(idCliente);
+        if (agendamento == null) {
+            System.out.println("Agendamento nao encontrado para o cliente: " + idCliente);
+            return;
+        }
+
+        agendamento.setDataConfirmacao(dataConfirmacao);
+
+        Cliente cliente = gerenciarCliente.buscarCliente(idCliente);
+        Servico servico = gerenciarServico.buscarServicoPorId(agendamento.getIdServico());
+
+        // ✅ Seleciona o primeiro veículo do cliente (ou personalize a lógica se desejar)
+        Veiculo veiculoUsado = (!cliente.getVeiculos().isEmpty()) ? cliente.getVeiculos().get(0) : null;
+
+        for (Elevador elevador : elevadores) {
+            if (!elevador.isOcupado()) {
+                if (elevador.isExclusivoAlinhamento()) {
+                    if (servico != null && servico.getTipoServico().toLowerCase().contains("alinhamento")) {
+                        elevador.reservar();
+                        elevador.setVeiculoAtual(veiculoUsado); // ✅ Associa veículo
+                        agendamento.setElevador(elevador);
+                        break;
+                    }
+                } else {
+                    elevador.reservar();
+                    elevador.setVeiculoAtual(veiculoUsado); // ✅ Associa veículo
+                    agendamento.setElevador(elevador);
+                    break;
+                }
+            }
+        }
+
+        if (agendamento.getElevador() == null) {
+            System.out.println("⚠️ Nenhum elevador disponível no momento.");
+        } else {
+            System.out.println("✅ Elevador reservado: " + agendamento.getElevador().getId());
+        }
+
+        agendamento.avancarEstado();
+        balancomensal.adicionarReceitaAgendamento(agendamento);
+
+        System.out.println("Agendamento confirmado com sucesso! " +
+                "Cliente: " + cliente.getNome() +
+                ", Data Agendamento: " + agendamento.getDataAgendamento() +
+                ", Data Confirmacao: " + dataConfirmacao +
+                ", Status: " + agendamento.getStatus());
+    }
+
+
+    public void atualizarStatusAgendamento(int idCliente) {
+        Agendamento agendamento = buscarAgendamentoPorIdCliente(idCliente);
+        if (agendamento == null) {
+            System.out.println("Agendamento nao encontrado.");
+            return;
+        }
+
+        agendamento.avancarEstado();
+        System.out.println("Status atualizado para: " + agendamento.getStatus() + " para o cliente " + idCliente);
+    }
+
+    public void salvarAgendamento() {
+        Jsonagendamento.salvarAgendamento(listaAgendamentos);
+    }
+
+    public boolean removerAgendamento(int idAgendamento) {
+        for (Agendamento agendamento : listaAgendamentos) {
+            if (agendamento.getIdCliente() == idAgendamento) {
+                balancomensal.removerReceitaAgendamento(agendamento);
+                listaAgendamentos.remove(agendamento);
+                System.out.println("Agendamento do cliente com ID: " + idAgendamento + " removido com sucesso.");
+                return true;
+            }
+        }
+        System.out.println("Agendamento com ID " + idAgendamento + " nao encontrado.");
+        return false;
+    }
+
+    public void imprimirVendas() {
+        if (listaVendas.isEmpty()) {
+            System.out.println("Nao ha vendas registradas.");
+            return;
+        }
+
+        System.out.println("Lista de Vendas:");
+        for (Venda venda : listaVendas) {
+            System.out.println("ID do Cliente: " + venda.getIdCliente() +
+                    ", ID do Produto: " + venda.getIdProduto() +
+                    ", Quantidade: " + venda.getQuantidade() +
+                    ", Data da Venda: " + venda.getDataVenda());
+        }
+    }
+
+    public void listarAgendamentos() {
+        if (listaAgendamentos.isEmpty()) {
+            System.out.println("Nao ha agendamentos cadastrados.");
+            return;
+        }
+
+        System.out.println("=== Lista de Agendamentos ===");
+        for (Agendamento agendamento : listaAgendamentos) {
+            Cliente cliente = gerenciarCliente.buscarCliente(agendamento.getIdCliente());
+            Servico servico = gerenciarServico.buscarServicoPorId(agendamento.getIdServico());
+
+            String nomeCliente = (cliente != null) ? cliente.getNome() : "Desconhecido";
+            String nomeServico = (servico != null) ? servico.getTipoServico() : "Desconhecido";
+            String nomeFuncionario = (agendamento.getFuncionario() != null) ? agendamento.getFuncionario().getNome() : "N/A ";
+            String dataConfirmacao = (agendamento.getDataConfirmacao() != null) ? agendamento.getDataConfirmacao().toString() : "Nao confirmada";
+
+            System.out.println("Cliente: " + nomeCliente +
+                    ", Servico: " + nomeServico +
+                    ", Funcionario: " + nomeFuncionario +
+                    ", Data Agendamento: " + agendamento.getDataAgendamento() +
+                    ", Data Confirmacao: " + dataConfirmacao +
+                    ", Status: " + agendamento.getStatus());
+        }
+    }
+
+    public void cadastrarServicosPadrao() {
+        servicosPadrao.add(new Servico("Troca de oleo e filtro", 1, 120.00));
+        servicosPadrao.add(new Servico("Alinhamento e balanceamento", 2, 100.00));
+        servicosPadrao.add(new Servico("Troca de pastilhas de freio", 3, 150.00));
+        servicosPadrao.add(new Servico("Troca de amortecedores", 4, 300.00));
+        servicosPadrao.add(new Servico("Troca de pneus", 5, 200.00));
+        servicosPadrao.add(new Servico("Revisao completa", 6, 400.00));
+        servicosPadrao.add(new Servico("Diagnostico eletronico", 7, 80.00));
+        servicosPadrao.add(new Servico("Troca de bateria", 8, 250.00));
+    }
+
+  public void listarServicos() {
+        if (servicosPadrao.isEmpty()) {
+            System.out.println("Nenhum servico cadastrado.");
+            return;
+        }
+
+        System.out.println("=== Lista de Servicos Disponiveis ===");
+        for (Servico s : servicosPadrao) {
+            System.out.println("ID: " + s.getIdServico() +
+                    " | Tipo: " + s.getTipoServico() +
+                    " | Preco: R$" + s.getPreco());
+        }
+    }
+
+    public void avancarStatusAgendamento(int idCliente) {
+    Agendamento agendamento = buscarAgendamentoPorIdCliente(idCliente);
+    if (agendamento == null) {
+        System.out.println("Agendamento não encontrado para o cliente com ID: " + idCliente);
+        return;
+    }
+
+    agendamento.avancarEstado();
+
+    // ✅ Se finalizado, libera o elevador
+    if (agendamento.getStatus().equals("Finalizado") && agendamento.getElevador() != null) {
+        agendamento.getElevador().liberar();
+        System.out.println("Elevador liberado para novo agendamento.");
+    }
+
+    System.out.println("Novo status do agendamento: " + agendamento.getStatus());
+}
+
+    public Servico buscarServicoPorIdManual(int id) {
+        for (Servico s : servicosPadrao) {
+            if (s.getIdServico() == id) return s;
+        }
+        return null;
+    }
+    public boolean reservarElevador(int id) {
+        for (Elevador e : elevadores) {
+            if (e.getId() == id) {
+                return e.reservar();
+            }
+        }
+        return false;
+    }
+
+    public void liberarElevador(int id) {
+        for (Elevador e : elevadores) {
+            if (e.getId() == id) {
+                e.liberar();
+                break;
+            }
+        }
+    }
+
+    public void listarElevadores() {
+        System.out.println("=== ELEVADORES ===");
+        for (Elevador e : elevadores) {
+            System.out.println(e);
+        }
+    }
+    public static Elevador getElevadorById(int id) {
+        for (Elevador e : elevadores) {
+            if (e != null && e.getId() == id){ 
+                return e;
+            }
+        }
+        return null;
+    }
+    public void salvarElevadores() {
+        Json.Jsonelevador.salvarElevadores(elevadores);
+    }
+    public static Elevador[] getElevadores() {
+        return elevadores;
+}
+    public void confirmarAgendamentoComVeiculo(int idCliente, Data dataConfirmacao, Veiculo veiculo) {
+    Agendamento agendamento = buscarAgendamentoPorIdCliente(idCliente);
+    if (agendamento == null) {
+        System.out.println("Agendamento não encontrado.");
+        return;
+    }
+
+    agendamento.setDataConfirmacao(dataConfirmacao);
+    agendamento.setVeiculo(veiculo);
+
+    // Alocação de elevador
+    for (Elevador elevador : elevadores) {
+        if (!elevador.isOcupado()) {
+            Servico servico = gerenciarServico.buscarServicoPorId(agendamento.getIdServico());
+            if (elevador.isExclusivoAlinhamento()) {
+                if (servico != null && servico.getTipoServico().toLowerCase().contains("alinhamento")) {
+                    elevador.reservar();
+                    agendamento.setElevador(elevador);
+                    break;
+                }
+            } else {
+                elevador.reservar();
+                agendamento.setElevador(elevador);
+                break;
+            }
+        }
+    }
+
+    if (agendamento.getElevador() == null) {
+        System.out.println("⚠️ Nenhum elevador disponível.");
+    } else {
+        System.out.println("✅ Elevador reservado: " + agendamento.getElevador().getId());
+    }
+
+    agendamento.avancarEstado();
+    balancomensal.adicionarReceitaAgendamento(agendamento);
+    System.out.println("Agendamento confirmado com sucesso com o veículo: " + veiculo);
+}
+
+
+}
