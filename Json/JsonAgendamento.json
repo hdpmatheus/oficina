@@ -71,7 +71,7 @@
       "endereco": "Campo Tijuco, 45",
       "telefone": 3890101
     },
-    "idElevador": 0,
+    "idElevador": -1,
     "veiculo": {
       "placa": "jojotodynho",
       "modelo": "bravo",
@@ -79,6 +79,65 @@
       "ano": 2017,
       "tipo": "hatch",
       "cor": "branca"
+    },
+    "nomeEstadoSalvo": "Agendado"
+  },
+  {
+    "dataAgendamento": {
+      "dia": 19,
+      "mes": 6,
+      "ano": 2025
+    },
+    "dataConfirmacao": {
+      "dia": 19,
+      "mes": 6,
+      "ano": 2025
+    },
+    "idCliente": 6,
+    "idServico": 6,
+    "funcionario": {
+      "id": 1,
+      "senha": 12345,
+      "cargo": "Mecanico",
+      "nome": "Boquita",
+      "endereco": "Campo Tijuco, 45",
+      "telefone": 3890101
+    },
+    "idElevador": 0,
+    "veiculo": {
+      "placa": "xx981",
+      "modelo": "honda ",
+      "marca": "honda",
+      "ano": 2008,
+      "tipo": "mini",
+      "cor": "van"
+    },
+    "nomeEstadoSalvo": "Finalizado"
+  },
+  {
+    "dataAgendamento": {
+      "dia": 19,
+      "mes": 6,
+      "ano": 2025
+    },
+    "idCliente": 6,
+    "idServico": 2,
+    "funcionario": {
+      "id": 1,
+      "senha": 12345,
+      "cargo": "Mecanico",
+      "nome": "Boquita",
+      "endereco": "Campo Tijuco, 45",
+      "telefone": 3890101
+    },
+    "idElevador": 0,
+    "veiculo": {
+      "placa": "xx981",
+      "modelo": "honda ",
+      "marca": "honda",
+      "ano": 2008,
+      "tipo": "mini",
+      "cor": "van"
     },
     "nomeEstadoSalvo": "Agendado"
   }

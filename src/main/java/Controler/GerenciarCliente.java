@@ -7,13 +7,15 @@ import Entidades.Cliente;
 import Json.Jsoncliente;
 import java.util.Collections;
 import java.util.List;
+import java.util.Iterator;
+import java.util.Comparator;
 
 public class GerenciarCliente {
 
     private List<Cliente> clientes;
 
     public GerenciarCliente() {
-        this.clientes = Jsoncliente.carregarCliente();  // ✅ Carrega automaticamente ao iniciar
+        this.clientes = Jsoncliente.carregarClientes();  // ✅ Carrega automaticamente ao iniciar
     }
 
     public void criarCliente(Cliente c) {
@@ -22,7 +24,7 @@ public class GerenciarCliente {
     }
 
     public void salvarCliente() {
-        Jsoncliente.salvarCliente(clientes);
+        Jsoncliente.salvarClientes(clientes);
     }
 
     public Cliente buscarCliente(int id) {
@@ -104,4 +106,45 @@ public class GerenciarCliente {
     public List<Cliente> getClientes() {
         return clientes;
     }
+    public boolean removerCliente(int id) {
+        Cliente cliente = buscarCliente(id);
+        if (cliente != null) {
+            clientes.remove(cliente);
+            salvarCliente(); // Atualiza o arquivo JSON
+            return true;
+        }
+        return false;
+    }
+    public Cliente findCliente(List<Cliente> lista, Cliente chave, Comparator<Cliente> comparator) {
+        Iterator<Cliente> it = lista.iterator();
+        while (it.hasNext()) {
+            Cliente atual = it.next();
+            if (comparator.compare(atual, chave) == 0) {
+                return atual;
+            }
+    }
+        return null;
+} 
+    public void carregarClienteDoArquivo() {
+        this.clientes = Jsoncliente.carregarClientes();
 }
+
+
+    // Encontra um cliente com determinado ID usando Iterator e Comparator
+    public Cliente findClienteByIdComIterator(int id) {
+        Cliente clienteBusca = new Cliente(id, 0, "", "", 0);
+        ClienteIdComparator comparator = new ClienteIdComparator();
+
+        Iterator<Cliente> iterator = clientes.iterator();
+        while (iterator.hasNext()) {
+            Cliente atual = iterator.next();
+            if (comparator.compare(atual, clienteBusca) == 0) {
+                return atual;
+            }
+        }
+        return null;
+    }
+}
+
+        
+

@@ -51,4 +51,9 @@ public class GerenciarServico {
         List<Servico> listaServicos = Arrays.asList(servicos);
         Jsonservico.salvarServico(listaServicos);
     }
+    public void carregarServicosDoArquivo() {
+        List<Servico> lista = Jsonservico.carregarServico();
+        this.servicos = lista.toArray(new Servico[0]); // conversão de List para array
+    }
+
 }

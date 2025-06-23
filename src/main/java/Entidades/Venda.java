@@ -1,33 +1,45 @@
 package Entidades;
 
-/**
- * Classe que representa uma venda realizada para um cliente da oficina mecânica.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class Venda {
-    private int idCliente;
-    private int idProduto;
-    private int quantidade;
-    private Data dataVenda; // Data da venda
+    private Cliente cliente;
+    private List<Produto> produtos;
+    private double valorTotal;
+    private Data dataVenda;
 
-    // Construtor da classe Venda
-    public Venda(int idCliente, int idProduto, int quantidade, Data dataVenda) {
-        this.idCliente = idCliente;
-        this.idProduto = idProduto;
-        this.quantidade = quantidade;
-        this.dataVenda = dataVenda;
+    public Venda(Cliente cliente) {
+        this.cliente = cliente;
+        this.produtos = new ArrayList<>();
+        this.valorTotal = 0.0;
+        this.dataVenda = new Data(); 
     }
 
-    // Métodos get
-    public int getIdCliente() {
-        return this.idCliente;
+    // Adicionar serviço como produto
+    public void adicionarItem(Servico servico) {
+        Produto item = new Produto(0, servico.getTipoServico(), 1, servico.getPreco());
+        this.produtos.add(item);
+        this.valorTotal += item.getPreco();
     }
 
-    public int getIdProduto() {
-        return idProduto;
+    // Adicionar produto diretamente
+    public void adicionarItem(Produto produto) {
+        this.produtos.add(produto);
+        this.valorTotal += produto.getPreco();
     }
 
-    public int getQuantidade() {
-        return quantidade;
+    // Getters
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
+
+    public double getValorTotal() {
+        return valorTotal;
     }
 
     public Data getDataVenda() {
@@ -37,10 +49,10 @@ public class Venda {
     @Override
     public String toString() {
         return "Venda{" +
-                "idCliente=" + idCliente +
-                ", idProduto=" + idProduto +
-                ", quantidade=" + quantidade +
-                ", dataVenda=" + dataVenda +
+                "cliente=" + cliente.getNome() +
+                ", valorTotal=R$" + valorTotal +
+                ", data=" + dataVenda +
+                ", itens=" + produtos.size() +
                 '}';
     }
 }

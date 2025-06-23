@@ -26,12 +26,12 @@ public class Elevador {
     }
 
     public Veiculo getVeiculoAtual() {
-        return veiculoAtual;
+        return this.veiculoAtual;
     }
 
-    public void setVeiculoAtual(Veiculo veiculoAtual) {
-        this.veiculoAtual = veiculoAtual;
-    }
+    public void setVeiculoAtual(Veiculo veiculo){
+        this.veiculoAtual = veiculo;
+    } 
 
     public boolean reservar() {
         if (!ocupado) {

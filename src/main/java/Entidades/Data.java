@@ -1,24 +1,29 @@
-
 package Entidades;
 
-/**
- *
- * @author Carlo
- */
+import java.time.LocalDate;
+
 public class Data {
-    
+
     private int dia;
     private int mes;
     private int ano;
 
-    // Construtor
+    // Construtor manual
     public Data(int dia, int mes, int ano) {
         this.dia = dia;
         this.mes = mes;
         this.ano = ano;
     }
 
-    // Métodos get
+    // ✅ Novo construtor com data atual
+    public Data() {
+        LocalDate hoje = LocalDate.now();
+        this.dia = hoje.getDayOfMonth();
+        this.mes = hoje.getMonthValue();
+        this.ano = hoje.getYear();
+    }
+
+    // Getters
     public int getDia() {
         return dia;
     }
@@ -31,7 +36,7 @@ public class Data {
         return ano;
     }
 
-    // Método para formatar a data como string
+    // Formatar como string
     public String formatar() {
         return String.format("%02d/%02d/%04d", dia, mes, ano);
     }
@@ -41,4 +46,3 @@ public class Data {
         return formatar();
     }
 }
-    

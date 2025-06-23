@@ -21,10 +21,10 @@ public class Jsoncliente {
      * Salva a lista de clientes no arquivo JSON.
      * Remove temporariamente a referência ao cliente nos veículos para evitar ciclo de serialização.
      */
-    public static void salvarCliente(List<Cliente> clientes) {
+    public static void salvarClientes(List<Cliente> clientes) {
         for (Cliente cliente : clientes) {
             for (Veiculo veiculo : cliente.getVeiculos()) {
-                veiculo.setCliente(null); // quebra referência circular
+                veiculo.setCliente(null); // Evita referência circular
             }
         }
 
@@ -35,7 +35,7 @@ public class Jsoncliente {
             writer.write(json);
             System.out.println("✅ Clientes salvos com sucesso!");
         } catch (IOException e) {
-            System.err.println("❌ Erro ao salvar Cliente: " + e.getMessage());
+            System.err.println("❌ Erro ao salvar clientes: " + e.getMessage());
         }
     }
 
@@ -43,23 +43,17 @@ public class Jsoncliente {
      * Carrega a lista de clientes do arquivo JSON.
      * Se o arquivo não existir ou estiver vazio, retorna uma lista vazia.
      */
-    public static List<Cliente> carregarCliente() {
+    public static List<Cliente> carregarClientes() {
         Gson gson = new Gson();
 
         try (Reader reader = new FileReader(caminho)) {
             Type listType = new TypeToken<ArrayList<Cliente>>(){}.getType();
             List<Cliente> clientes = gson.fromJson(reader, listType);
 
-            if (clientes == null) {
-                System.out.println("⚠️ Nenhum cliente encontrado no arquivo JSON.");
-                return new ArrayList<>();
-            }
-
-            //System.out.println("✅ Clientes carregados com sucesso!");
-            return clientes;
+            return (clientes != null) ? clientes : new ArrayList<>();
 
         } catch (IOException e) {
-            System.err.println("⚠️ Erro ao carregar Cliente: " + e.getMessage());
+            System.err.println("⚠️ Erro ao carregar clientes: " + e.getMessage());
             return new ArrayList<>();
         }
     }

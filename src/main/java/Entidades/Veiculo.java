@@ -68,7 +68,7 @@ public class Veiculo {
                 ", ano=" + ano +
                 ", tipo='" + tipo + '\'' +
                 ", cor='" + cor + '\'' +
-                ", cliente=" + cliente.getNome() +
+                ", cliente=" + (cliente != null ? cliente.getNome() : "N/A") +
                 '}';
     }
 

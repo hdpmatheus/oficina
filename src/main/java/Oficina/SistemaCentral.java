@@ -10,21 +10,10 @@ import Controler.GerenciarCliente;
 import Controler.GerenciarServico;
 import Controler.GerenciarFuncionario;
 import Controler.GerenciarGerente;
-import Entidades.Agendamento;
-import Entidades.Cliente;
-import Entidades.Data;
-import Entidades.Estoque;
-import Entidades.Funcionario;
-import Entidades.Gerente;
-import Entidades.Veiculo;
-import Entidades.Elevador;
-import Entidades.Produto;
-import Entidades.Servico;
-import Entidades.Venda;
+import Entidades.*;
 import Json.Jsonagendamento;
 import Json.Jsonvenda;
 import Json.Jsonelevador;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +22,7 @@ public class SistemaCentral {
 
     private GerenciarCliente gerenciarCliente;
     private GerenciarServico gerenciarServico;
-    private Estoque estoque;
+    private Estoque estoque = new Estoque();
     private GerenciarFuncionario gerenciarFuncionario;
     private GerenciarGerente gerenciarGerente;
     private ProcessadorPagamento processadorPagamento;
@@ -54,6 +43,8 @@ public class SistemaCentral {
     public SistemaCentral() {
         this.gerenciarCliente = new GerenciarCliente();
         this.gerenciarServico = new GerenciarServico();
+        this.gerenciarCliente.carregarClienteDoArquivo();
+        this.estoque.carregarProdutosDoArquivo();
         this.gerenciarFuncionario = new GerenciarFuncionario();
         this.gerenciarGerente = new GerenciarGerente();
         this.estoque = new Estoque();
@@ -76,7 +67,41 @@ public class SistemaCentral {
             elevadores[1] = new Elevador(2, false); // Uso geral
             elevadores[2] = new Elevador(3, true);  // Exclusivo para Alinhamento e Balanceamento
         }
-        
+        public boolean reservarElevador(int id, Veiculo veiculo) {
+            if (id < 1 || id > elevadores.length) {
+                System.out.println("❌ ID de elevador inválido.");
+                return false;
+            }
+            Elevador elevador = elevadores[id - 1];
+            if (elevador == null) {
+                System.out.println("❌ Elevador não existe.");
+                return false;
+            }
+            if (elevador.reservar()) {
+                elevador.setVeiculoAtual(veiculo);
+                System.out.println("✅ Elevador " + id + " reservado com sucesso.");
+                Jsonelevador.salvarElevadores(elevadores);
+                return true;
+            } else {
+                System.out.println("⚠️ Elevador " + id + " já está ocupado.");
+                return false;
+            }
+        }
+
+        public void liberarElevador(int id) {
+            if (id < 1 || id > elevadores.length) {
+                System.out.println("❌ ID de elevador inválido.");
+                return;
+            }
+            Elevador elevador = elevadores[id - 1];
+            if (elevador != null) {
+                elevador.liberar();
+                System.out.println("✅ Elevador " + id + " liberado.");
+            } else {
+                System.out.println("❌ Elevador não encontrado.");
+            }
+        }
+
         public void exibirTotalDeVeiculos(){
             System.out.println("Total de veiculos (encapsulado): " + Veiculo.getContadorVeiculosEncapsulado());
             System.out.println("Total de veículos (protegido): " + Veiculo.getContadorVeiculosProtegido());
@@ -94,34 +119,34 @@ public class SistemaCentral {
     public BalancoMensal getBalancomensal() { return balancomensal; }
     public ControleDeAcesso getControleDeAcesso() { return controledeacesso; }
 
-    public void realizarVenda(int idCliente, int idProduto, int quantidade, ProcessadorPagamento pagamento, Data dataVenda) {
+    public void realizarVenda(int idCliente, int idProduto, ProcessadorPagamento pagamento) {
         Cliente cliente = gerenciarCliente.buscarCliente(idCliente);
-        if (cliente == null) {
-            System.out.println("Cliente nao encontrado.");
-            return;
-        }
-
         Produto produto = estoque.buscarProduto(idProduto);
-        if (produto == null) {
-            System.out.println("Produto nao encontrado.");
+
+        if (cliente == null || produto == null) {
+            System.out.println("❌ Cliente ou produto não encontrado.");
             return;
         }
 
-        if (produto.getQuantidade() < quantidade) {
-            System.out.println("Quantidade solicitada nao disponivel no estoque.");
+        if (produto.getQuantidade() <= 0) {
+            System.out.println("❌ Estoque insuficiente para o produto: " + produto.getNome());
             return;
         }
 
-        estoque.removerQuantidade(idProduto, quantidade);
-        double total = produto.getPreco() * quantidade;
+        double total = produto.getPreco();
 
         if (pagamento.realizarPagamento(total, idCliente)) {
-            Venda venda = new Venda(idCliente, idProduto, quantidade, dataVenda);
-            listaVendas.add(venda);
+            estoque.removerQuantidade(produto.getIdProduto(), 1);
+
+            Venda venda = new Venda(cliente);
+            venda.adicionarItem(produto);
+
+            registrarVenda(venda);
             balancomensal.adicionarReceitaVenda(venda);
-            System.out.println("Venda realizada com sucesso! " + dataVenda + ", Cliente: " + cliente.getNome() + ", Produto: " + produto.getNome() + ", Total: R$ " + total);
+
+            System.out.println("✅ Venda realizada com sucesso!");
         } else {
-            System.out.println("Falha ao processar pagamento.");
+            System.out.println("❌ Pagamento recusado.");
         }
     }
 
@@ -251,14 +276,17 @@ public class SistemaCentral {
             return;
         }
 
-        System.out.println("Lista de Vendas:");
+        System.out.println("=== Lista de Vendas ===");
         for (Venda venda : listaVendas) {
-            System.out.println("ID do Cliente: " + venda.getIdCliente() +
-                    ", ID do Produto: " + venda.getIdProduto() +
-                    ", Quantidade: " + venda.getQuantidade() +
-                    ", Data da Venda: " + venda.getDataVenda());
+            System.out.println("Cliente: " + venda.getCliente().getNome() +
+                               ", Data: " + venda.getDataVenda() +
+                               ", Valor Total: R$" + venda.getValorTotal());
+            for (Produto p : venda.getProdutos()) {
+                System.out.println("  - Item: " + p.getNome() + " | R$" + p.getPreco());
+            }
         }
     }
+
 
     public void listarAgendamentos() {
         if (listaAgendamentos.isEmpty()) {
@@ -284,6 +312,15 @@ public class SistemaCentral {
                     ", Status: " + agendamento.getStatus());
         }
     }
+        public void carregarEstoquePadrao() {
+        estoque.criarProduto(new Produto(1, "Óleo 10W40", 20, 50.0));
+        estoque.criarProduto(new Produto(2, "Filtro de óleo", 20, 30.0));
+        estoque.criarProduto(new Produto(3, "Pastilhas de freio", 15, 80.0));
+        estoque.criarProduto(new Produto(4, "Amortecedor", 10, 150.0));
+        estoque.criarProduto(new Produto(5, "Pneu Aro escolhido", 16, 200.0));
+        estoque.criarProduto(new Produto(6, "Bateria 60Ah", 8, 250.0));
+    }
+
 
     public void cadastrarServicosPadrao() {
         servicosPadrao.add(new Servico("Troca de oleo e filtro", 1, 120.00));
@@ -295,8 +332,54 @@ public class SistemaCentral {
         servicosPadrao.add(new Servico("Diagnostico eletronico", 7, 80.00));
         servicosPadrao.add(new Servico("Troca de bateria", 8, 250.00));
     }
+    public void realizarAtendimentoComNota(Cliente cliente, Servico servico) {
+        List<Produto> itensUsados = new ArrayList<>();
+        List<Integer> idsProdutos = MapaServicoProduto.getIdsProdutosParaServico(servico.getTipoServico());
 
-  public void listarServicos() {
+        for (int idProduto : idsProdutos) {
+            Produto produto = estoque.buscarProduto(idProduto);
+            if (produto != null && produto.getQuantidade() > 0) {
+                estoque.removerQuantidade(idProduto, 1);
+                itensUsados.add(produto);
+            } else {
+                System.out.println("⚠️ Produto insuficiente ou não encontrado para ID: " + idProduto);
+            }
+        }
+
+        // Criar venda
+        Venda venda = new Venda(cliente);
+        venda.adicionarItem(servico);
+        for (Produto p : itensUsados) {
+            venda.adicionarItem(p);
+        }
+
+        // Registrar a venda (usando método dedicado)
+        registrarVenda(venda);
+
+        // Emitir nota fiscal
+        System.out.println("\n=== Nota Fiscal ===");
+        System.out.println("Cliente: " + cliente.getNome() + " | CPF: " + cliente.getCpf());
+        System.out.println("Serviço realizado: " + servico.getTipoServico() + " - R$" + servico.getPreco());
+
+        if (!itensUsados.isEmpty()) {
+            System.out.println("Produtos utilizados:");
+            for (Produto p : itensUsados) {
+                System.out.println("- " + p.getNome() + " (R$" + p.getPreco() + ")");
+            }
+        } else {
+            System.out.println("Nenhum produto foi consumido neste serviço.");
+        }
+
+        System.out.println("Valor Total da Venda: R$" + venda.getValorTotal());
+    }
+    public void registrarVenda(Venda venda) {
+        listaVendas.add(venda);
+        System.out.println("✅ Venda registrada com sucesso.");
+}
+
+
+
+   public void listarServicos() {
         if (servicosPadrao.isEmpty()) {
             System.out.println("Nenhum servico cadastrado.");
             return;
@@ -334,24 +417,6 @@ public class SistemaCentral {
         }
         return null;
     }
-    public boolean reservarElevador(int id) {
-        for (Elevador e : elevadores) {
-            if (e.getId() == id) {
-                return e.reservar();
-            }
-        }
-        return false;
-    }
-
-    public void liberarElevador(int id) {
-        for (Elevador e : elevadores) {
-            if (e.getId() == id) {
-                e.liberar();
-                break;
-            }
-        }
-    }
-
     public void listarElevadores() {
         System.out.println("=== ELEVADORES ===");
         for (Elevador e : elevadores) {

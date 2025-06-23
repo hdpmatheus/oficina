@@ -65,5 +65,107 @@
     "nome": "Pedro Monteiro",
     "endereco": "Lab th hugo",
     "telefone": 38919191
+  },
+  {
+    "idCliente": 5,
+    "cpf": 1107566,
+    "veiculos": [
+      {
+        "placa": "Jojoeppc",
+        "modelo": "Filder",
+        "marca": "Toyota",
+        "ano": 2007,
+        "tipo": "perua",
+        "cor": "Prata"
+      }
+    ],
+    "nome": "Jojo",
+    "endereco": "Vale das Aroeiras",
+    "telefone": 38984948
+  },
+  {
+    "idCliente": 6,
+    "cpf": 1100448,
+    "veiculos": [
+      {
+        "placa": "xx981",
+        "modelo": "honda ",
+        "marca": "honda",
+        "ano": 2008,
+        "tipo": "mini",
+        "cor": "van"
+      }
+    ],
+    "nome": "Marcio",
+    "endereco": "rua bh",
+    "telefone": 319999
+  },
+  {
+    "idCliente": 7,
+    "cpf": 93994,
+    "veiculos": [
+      {
+        "placa": "xx930",
+        "modelo": "fiat",
+        "marca": "fiat",
+        "ano": 2023,
+        "tipo": "sedan",
+        "cor": "preto"
+      }
+    ],
+    "nome": "Bento",
+    "endereco": "rua antonio de souza",
+    "telefone": 38278994
+  },
+  {
+    "idCliente": 8,
+    "cpf": 323145,
+    "veiculos": [
+      {
+        "placa": "xo32ix",
+        "modelo": "onix",
+        "marca": "chevrolet",
+        "ano": 2016,
+        "tipo": "hatch",
+        "cor": "branco"
+      }
+    ],
+    "nome": "Guilherme",
+    "endereco": "silveira lobo",
+    "telefone": 3193849
+  },
+  {
+    "idCliente": 9,
+    "cpf": 1849753,
+    "veiculos": [
+      {
+        "placa": "x8382x",
+        "modelo": "porsche ",
+        "marca": "porsche",
+        "ano": 2018,
+        "tipo": "911",
+        "cor": "vermelha"
+      }
+    ],
+    "nome": "Gabriela",
+    "endereco": "savassi",
+    "telefone": 38208083
+  },
+  {
+    "idCliente": 10,
+    "cpf": 432332,
+    "veiculos": [
+      {
+        "placa": "4839xx",
+        "modelo": "toro",
+        "marca": "fiat",
+        "ano": 2021,
+        "tipo": "caminhonete",
+        "cor": "prata"
+      }
+    ],
+    "nome": "Alfredo",
+    "endereco": "Silveira lobo",
+    "telefone": 3139483
   }
 ]

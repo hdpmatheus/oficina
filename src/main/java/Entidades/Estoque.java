@@ -4,7 +4,7 @@ import Comparator.ProdutoIdComparator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import Json.Jsonproduto;
 /**
  * Estoque de produtos da oficina mecânica.
  */
@@ -16,6 +16,10 @@ public class Estoque {
     public Estoque() {
         this.produtos = new ArrayList<>();
     }
+    public void carregarProdutosDoArquivo() {
+        this.produtos = Jsonproduto.carregarProdutos();
+}
+
 
     // Método para adicionar novo produto ao estoque
     public void criarProduto(Produto p) {

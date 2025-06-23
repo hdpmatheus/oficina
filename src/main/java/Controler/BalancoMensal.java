@@ -10,7 +10,6 @@ import Entidades.Estoque;
 import Entidades.Produto;
 import Json.Jsonbalancomensal;
 import oficina.Login;
-import java.util.ArrayList;
 import java.util.List;
 
 public class BalancoMensal {
@@ -59,14 +58,27 @@ public class BalancoMensal {
     }
 
     public void adicionarReceitaVenda(Venda venda) {
-        Produto produto = estoque.buscarProduto(venda.getIdProduto());
-        if (produto != null) {
-            double totalVenda = venda.getQuantidade() * produto.getPreco();
-            adicionarReceita("Venda de produto: " + produto.getNome(), totalVenda, venda.getDataVenda());
-        } else {
-            System.out.println("Produto não encontrado para a venda com ID: " + venda.getIdProduto());
+        if (venda.getProdutos().isEmpty()) {
+            System.out.println("⚠️ Nenhum item registrado na venda para " + venda.getCliente().getNome());
+            return;
         }
+
+        double total = 0.0;
+        StringBuilder descricao = new StringBuilder("Venda para " + venda.getCliente().getNome() + ": ");
+
+        for (Produto p : venda.getProdutos()) {
+            total += p.getPreco();
+            descricao.append(p.getNome()).append(" (R$").append(p.getPreco()).append("), ");
+        }
+
+        // Remove vírgula final
+        if (descricao.lastIndexOf(",") == descricao.length() - 2) {
+            descricao.delete(descricao.length() - 2, descricao.length());
+        }
+
+        adicionarReceita(descricao.toString(), total, venda.getDataVenda());
     }
+
 
     public void adicionarReceitaAgendamento(Agendamento agendamento) {
         Servico servico = gerenciarServico.buscarServicoPorId(agendamento.getIdServico());

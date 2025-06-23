@@ -16,5 +16,32 @@
       "mes": 6,
       "ano": 2025
     }
+  },
+  {
+    "descricao": "Agendamento de serviço: Troca de pastilhas de freio",
+    "valor": 150.0,
+    "data": {
+      "dia": 6,
+      "mes": 6,
+      "ano": 2025
+    }
+  },
+  {
+    "descricao": "Agendamento de serviço: Revisao completa",
+    "valor": 400.0,
+    "data": {
+      "dia": 19,
+      "mes": 6,
+      "ano": 2025
+    }
+  },
+  {
+    "descricao": "Agendamento de serviço: Revisao completa",
+    "valor": 400.0,
+    "data": {
+      "dia": 19,
+      "mes": 6,
+      "ano": 2025
+    }
   }
 ]
