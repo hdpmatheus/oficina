@@ -150,5 +150,13 @@
     "nome": "João",
     "endereco": "Rua A",
     "telefone": 99999999
+  },
+  {
+    "idCliente": 1,
+    "cpf": 123456789,
+    "veiculos": [],
+    "nome": "João",
+    "endereco": "Rua A",
+    "telefone": 99999999
   }
 ]
