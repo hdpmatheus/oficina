@@ -23,6 +23,21 @@ public class Veiculo {
     // Estratégia 2: Protegida (protected static direto)
     protected static int contadorVeiculosProtegido = 0;
 
+    public static int getContadorVeiculosProtegido() {
+        return contadorVeiculosProtegido;
+    }
+    
+    public static void setContadorVeiculosEncapsulado(int valor) {
+    contadorVeiculosEncapsulado = valor;
+    }
+    
+    public static void setContadorVeiculosProtegido(int valor) {
+    contadorVeiculosProtegido = valor;
+    }
+
+
+
+    // Construtor
     public Veiculo(String placa, String modelo, int ano, String marca, String tipo, String cor, Cliente cliente) {
         this.placa = placa;
         this.modelo = modelo;
@@ -32,8 +47,8 @@ public class Veiculo {
         this.cor = cor;
         this.cliente = cliente;
 
-        // Incrementa ambos os contadores
-        contadorVeiculosEncapsulado++;
+        // ✅ Incrementa os contadores automaticamente ao instanciar
+        incrementarContadorEncapsulado();
         contadorVeiculosProtegido++;
     }
 
@@ -84,8 +99,4 @@ public class Veiculo {
     public int hashCode() {
         return placa != null ? placa.toLowerCase().hashCode() : 0;
     }
-    
-    public static int getContadorVeiculosProtegido() {
-    return contadorVeiculosProtegido;
-}
 }

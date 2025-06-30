@@ -103,7 +103,7 @@
       "endereco": "Campo Tijuco, 45",
       "telefone": 3890101
     },
-    "idElevador": 0,
+    "idElevador": -1,
     "veiculo": {
       "placa": "xx981",
       "modelo": "honda ",
@@ -130,7 +130,7 @@
       "endereco": "Campo Tijuco, 45",
       "telefone": 3890101
     },
-    "idElevador": 0,
+    "idElevador": -1,
     "veiculo": {
       "placa": "xx981",
       "modelo": "honda ",

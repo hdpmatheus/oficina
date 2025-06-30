@@ -43,5 +43,77 @@
       "mes": 6,
       "ano": 2025
     }
+  },
+  {
+    "descricao": "Agendamento de serviço: Troca de oleo e filtro",
+    "valor": 120.0,
+    "data": {
+      "dia": 1,
+      "mes": 1,
+      "ano": 2025
+    }
+  },
+  {
+    "descricao": "Agendamento de serviço: Diagnostico eletronico",
+    "valor": 80.0,
+    "data": {
+      "dia": 3,
+      "mes": 6,
+      "ano": 2025
+    }
+  },
+  {
+    "descricao": "Agendamento de serviço: Troca de pastilhas de freio",
+    "valor": 150.0,
+    "data": {
+      "dia": 1,
+      "mes": 1,
+      "ano": 2025
+    }
+  },
+  {
+    "descricao": "Agendamento de serviço: Revisao completa",
+    "valor": 400.0,
+    "data": {
+      "dia": 19,
+      "mes": 6,
+      "ano": 2025
+    }
+  },
+  {
+    "descricao": "Agendamento de serviço: Troca de pneus",
+    "valor": 200.0,
+    "data": {
+      "dia": 1,
+      "mes": 1,
+      "ano": 2025
+    }
+  },
+  {
+    "descricao": "Agendamento de serviço: Revisao completa",
+    "valor": 400.0,
+    "data": {
+      "dia": 1,
+      "mes": 1,
+      "ano": 2025
+    }
+  },
+  {
+    "descricao": "Agendamento de serviço: Diagnostico eletronico",
+    "valor": 80.0,
+    "data": {
+      "dia": 1,
+      "mes": 1,
+      "ano": 2025
+    }
+  },
+  {
+    "descricao": "Agendamento de serviço: Troca de bateria",
+    "valor": 250.0,
+    "data": {
+      "dia": 1,
+      "mes": 1,
+      "ano": 2025
+    }
   }
 ]

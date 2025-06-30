@@ -36,6 +36,11 @@ public class GerenciarServico {
         );
         return (index >= 0) ? servicos[index] : null;
     }
+    
+    public List<Servico> getServicos() {
+        return Arrays.asList(servicos);
+    }
+
 
     // Metodo para imprimir os servicos armazenados no vetor
     public void imprimirServicos() {

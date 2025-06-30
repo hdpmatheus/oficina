@@ -57,6 +57,7 @@ public class Oficina {
         } else if (tipoUsuarioLogado.equals("funcionario")) {
             MenuFuncionario.menuFuncionario(central, scanner);
         }
+        
 
         // Salvar todos os dados ao encerrar
         central.getGerenciarCliente().salvarCliente();

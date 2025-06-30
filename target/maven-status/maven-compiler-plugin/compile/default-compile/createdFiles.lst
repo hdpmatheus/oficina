@@ -43,6 +43,7 @@ Controler\GerenciarServico.class
 Oficina\Oficina.class
 Json\Jsonfuncionario.class
 Json\Jsonbalancomensal$2.class
+Json\Jsonveiculo$1.class
 Controler\GerenciarCliente.class
 Json\Jsonveiculo.class
 Json\Jsoncontroledeacesso.class

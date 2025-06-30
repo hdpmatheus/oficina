@@ -1,30 +1,5 @@
 [
   {
-    "idCliente": 1,
-    "cpf": 110951,
-    "veiculos": [
-      {
-        "placa": "xx12",
-        "modelo": "Fiat Toro",
-        "marca": "Fiat",
-        "ano": 2023,
-        "tipo": "caminhonete",
-        "cor": "Branco"
-      },
-      {
-        "placa": "FELPSLOVE",
-        "modelo": "X6",
-        "marca": "BMW",
-        "ano": 2025,
-        "tipo": "SUV",
-        "cor": "Azul"
-      }
-    ],
-    "nome": "Livia",
-    "endereco": "Rua anto",
-    "telefone": 21999
-  },
-  {
     "idCliente": 2,
     "cpf": 110,
     "veiculos": [
@@ -50,57 +25,6 @@
     "telefone": 31313
   },
   {
-    "idCliente": 4,
-    "cpf": 100022,
-    "veiculos": [
-      {
-        "placa": "jojotodynho",
-        "modelo": "bravo",
-        "marca": "fiat",
-        "ano": 2017,
-        "tipo": "hatch",
-        "cor": "branca"
-      }
-    ],
-    "nome": "Pedro Monteiro",
-    "endereco": "Lab th hugo",
-    "telefone": 38919191
-  },
-  {
-    "idCliente": 5,
-    "cpf": 1107566,
-    "veiculos": [
-      {
-        "placa": "Jojoeppc",
-        "modelo": "Filder",
-        "marca": "Toyota",
-        "ano": 2007,
-        "tipo": "perua",
-        "cor": "Prata"
-      }
-    ],
-    "nome": "Jojo",
-    "endereco": "Vale das Aroeiras",
-    "telefone": 38984948
-  },
-  {
-    "idCliente": 6,
-    "cpf": 1100448,
-    "veiculos": [
-      {
-        "placa": "xx981",
-        "modelo": "honda ",
-        "marca": "honda",
-        "ano": 2008,
-        "tipo": "mini",
-        "cor": "van"
-      }
-    ],
-    "nome": "Marcio",
-    "endereco": "rua bh",
-    "telefone": 319999
-  },
-  {
     "idCliente": 7,
     "cpf": 93994,
     "veiculos": [
@@ -116,6 +40,23 @@
     "nome": "Bento",
     "endereco": "rua antonio de souza",
     "telefone": 38278994
+  },
+  {
+    "idCliente": 4,
+    "cpf": 100022,
+    "veiculos": [
+      {
+        "placa": "jojotodynho",
+        "modelo": "bravo",
+        "marca": "fiat",
+        "ano": 2017,
+        "tipo": "hatch",
+        "cor": "branca"
+      }
+    ],
+    "nome": "Pedro Monteiro",
+    "endereco": "Lab th hugo",
+    "telefone": 38919191
   },
   {
     "idCliente": 8,
@@ -135,6 +76,57 @@
     "telefone": 3193849
   },
   {
+    "idCliente": 10,
+    "cpf": 432332,
+    "veiculos": [
+      {
+        "placa": "4839xx",
+        "modelo": "toro",
+        "marca": "fiat",
+        "ano": 2021,
+        "tipo": "caminhonete",
+        "cor": "prata"
+      }
+    ],
+    "nome": "Alfredo",
+    "endereco": "Silveira lobo",
+    "telefone": 3139483
+  },
+  {
+    "idCliente": 6,
+    "cpf": 1100448,
+    "veiculos": [
+      {
+        "placa": "xx981",
+        "modelo": "honda ",
+        "marca": "honda",
+        "ano": 2008,
+        "tipo": "mini",
+        "cor": "van"
+      }
+    ],
+    "nome": "Marcio",
+    "endereco": "rua bh",
+    "telefone": 319999
+  },
+  {
+    "idCliente": 5,
+    "cpf": 1107566,
+    "veiculos": [
+      {
+        "placa": "Jojoeppc",
+        "modelo": "Filder",
+        "marca": "Toyota",
+        "ano": 2007,
+        "tipo": "perua",
+        "cor": "Prata"
+      }
+    ],
+    "nome": "Jojo",
+    "endereco": "Vale das Aroeiras",
+    "telefone": 38984948
+  },
+  {
     "idCliente": 9,
     "cpf": 1849753,
     "veiculos": [
@@ -152,20 +144,11 @@
     "telefone": 38208083
   },
   {
-    "idCliente": 10,
-    "cpf": 432332,
-    "veiculos": [
-      {
-        "placa": "4839xx",
-        "modelo": "toro",
-        "marca": "fiat",
-        "ano": 2021,
-        "tipo": "caminhonete",
-        "cor": "prata"
-      }
-    ],
-    "nome": "Alfredo",
-    "endereco": "Silveira lobo",
-    "telefone": 3139483
+    "idCliente": 1,
+    "cpf": 123456789,
+    "veiculos": [],
+    "nome": "João",
+    "endereco": "Rua A",
+    "telefone": 99999999
   }
 ]
