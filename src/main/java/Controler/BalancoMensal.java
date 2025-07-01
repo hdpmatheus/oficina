@@ -1,17 +1,31 @@
 package Controler;
 
-import Entidades.Despesa;
-import Entidades.Receita;
-import Entidades.Venda;
-import Entidades.Agendamento;
-import Entidades.Servico;
-import Entidades.Data;
-import Entidades.Estoque;
-import Entidades.Produto;
+import Entidades.*;
 import Json.Jsonbalancomensal;
 import oficina.Login;
+
 import java.util.List;
 
+/**
+ * Classe responsável por controlar e registrar o balanço financeiro mensal da oficina.
+ * 
+ * Gerencia listas de {@link Receita} e {@link Despesa}, associadas a serviços, vendas e agendamentos.
+ * Possui integração com estoque, controle de serviços e o sistema de login, além de persistência via JSON.
+ * 
+ * Funcionalidades principais:
+ * <ul>
+ *     <li>Adicionar receitas e despesas manuais ou automáticas</li>
+ *     <li>Remover receitas vinculadas a agendamentos cancelados</li>
+ *     <li>Gerar relatórios de balanço mensal</li>
+ *     <li>Persistir os dados financeiros com Gson</li>
+ * </ul>
+ * 
+ * Os dados são carregados automaticamente no construtor através da classe {@link Jsonbalancomensal}.
+ * 
+ * @author 
+ * Matheus Henrique de Paula <br>
+ * Felipe Alcântara Guimarães Veloso
+ */
 public class BalancoMensal {
 
     private List<Receita> receitas;
@@ -20,6 +34,13 @@ public class BalancoMensal {
     private GerenciarServico gerenciarServico;
     private Login login;
 
+    /**
+     * Construtor principal que carrega receitas e despesas de arquivos JSON.
+     *
+     * @param estoque Estoque da oficina
+     * @param gerenciarServico Controlador de serviços
+     * @param login Sistema de login para controle de acesso
+     */
     public BalancoMensal(Estoque estoque, GerenciarServico gerenciarServico, Login login) {
         this.receitas = Jsonbalancomensal.carregarReceitas();
         this.despesas = Jsonbalancomensal.carregarDespesas();
@@ -28,6 +49,13 @@ public class BalancoMensal {
         this.login = login;
     }
 
+    /**
+     * Construtor alternativo para uso com listas de receitas e despesas prontas.
+     *
+     * @param receitas Lista de receitas
+     * @param despesas Lista de despesas
+     * @param login Sistema de login
+     */
     public BalancoMensal(List<Receita> receitas, List<Despesa> despesas, Login login) {
         this.receitas = receitas;
         this.despesas = despesas;
@@ -37,6 +65,7 @@ public class BalancoMensal {
     public Login getLogin() {
         return login;
     }
+
     public List<Receita> getReceitas() {
         return receitas;
     }
@@ -45,18 +74,35 @@ public class BalancoMensal {
         return despesas;
     }
 
+    /**
+     * Adiciona uma nova receita manualmente ao balanço.
+     *
+     * @param descricao Descrição da receita
+     * @param valor Valor da receita
+     * @param data Data da receita
+     */
     public void adicionarReceita(String descricao, double valor, Data data) {
         Receita receita = new Receita(descricao, valor, data);
         receitas.add(receita);
         salvarBalanco();
     }
 
+    /**
+     * Adiciona uma despesa ao balanço.
+     *
+     * @param despesa Objeto despesa a ser adicionado
+     */
     public void adicionarDespesa(Despesa despesa) {
         this.despesas.add(despesa);
         System.out.println("Despesa adicionada: " + despesa.getDescricao());
         salvarBalanco();
     }
 
+    /**
+     * Gera uma receita automática com base em uma venda de produtos.
+     *
+     * @param venda Venda realizada
+     */
     public void adicionarReceitaVenda(Venda venda) {
         if (venda.getProdutos().isEmpty()) {
             System.out.println("⚠️ Nenhum item registrado na venda para " + venda.getCliente().getNome());
@@ -71,7 +117,6 @@ public class BalancoMensal {
             descricao.append(p.getNome()).append(" (R$").append(p.getPreco()).append("), ");
         }
 
-        // Remove vírgula final
         if (descricao.lastIndexOf(",") == descricao.length() - 2) {
             descricao.delete(descricao.length() - 2, descricao.length());
         }
@@ -79,7 +124,11 @@ public class BalancoMensal {
         adicionarReceita(descricao.toString(), total, venda.getDataVenda());
     }
 
-
+    /**
+     * Adiciona uma receita com base em um agendamento concluído.
+     *
+     * @param agendamento Agendamento finalizado
+     */
     public void adicionarReceitaAgendamento(Agendamento agendamento) {
         Servico servico = gerenciarServico.buscarServicoPorId(agendamento.getIdServico());
         if (servico != null) {
@@ -89,6 +138,11 @@ public class BalancoMensal {
         }
     }
 
+    /**
+     * Remove a receita associada a um agendamento cancelado.
+     *
+     * @param agendamento Agendamento a ser desconsiderado
+     */
     public void removerReceitaAgendamento(Agendamento agendamento) {
         Servico servico = gerenciarServico.buscarServicoPorId(agendamento.getIdServico());
         if (servico != null) {
@@ -106,6 +160,12 @@ public class BalancoMensal {
         }
     }
 
+    /**
+     * Calcula e exibe o balanço mensal de um determinado mês e ano.
+     *
+     * @param mes Mês desejado (1 a 12)
+     * @param ano Ano desejado
+     */
     public void realizarBalancoMensal(int mes, int ano) {
         double totalReceitas = 0;
         double totalDespesas = 0;
@@ -128,6 +188,9 @@ public class BalancoMensal {
         System.out.println("Lucro Líquido: R$ " + (totalReceitas - totalDespesas));
     }
 
+    /**
+     * Exibe um relatório completo com todas as receitas e despesas registradas.
+     */
     public void exibirBalanco() {
         System.out.println("=== RELATÓRIO DE BALANÇO ===");
         System.out.println("Receitas:");
@@ -148,6 +211,10 @@ public class BalancoMensal {
         System.out.println("Lucro Líquido: R$ " + (totalReceitas - totalDespesas));
     }
 
+    /**
+     * Salva as listas de receitas e despesas nos respectivos arquivos JSON.
+     * Este método é chamado automaticamente após alterações.
+     */
     private void salvarBalanco() {
         Jsonbalancomensal.salvarReceitas(receitas);
         Jsonbalancomensal.salvarDespesas(despesas);
