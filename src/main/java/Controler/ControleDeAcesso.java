@@ -12,14 +12,24 @@ import java.util.List;
 /**
  * Classe responsável por registrar e gerenciar os acessos (entrada e saída)
  * dos funcionários na oficina mecânica.
+ * 
+ * <p>Os registros são persistidos em arquivo JSON por meio da classe {@link Jsoncontroledeacesso}.</p>
+ * 
+ * @author Felipe Alcântara Guimarães Veloso
+ * @author Matheus Henrique de Paula
  */
 public class ControleDeAcesso {
 
+    /** Lista de acessos registrados */
     private List<Acesso> acessos;
+
+    /** Gerenciador de funcionários utilizado para validar IDs */
     private GerenciarFuncionario gerenciarFuncionario;
 
     /**
      * Construtor que recebe o gerenciador de funcionários e inicializa a lista de acessos.
+     * 
+     * @param gerenciarFuncionario Gerenciador responsável pelos funcionários cadastrados
      */
     public ControleDeAcesso(GerenciarFuncionario gerenciarFuncionario) {
         this.acessos = new ArrayList<>();
