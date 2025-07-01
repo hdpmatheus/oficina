@@ -28,10 +28,12 @@ public class GerenciarCliente {
     }
 
     public Cliente buscarCliente(int id) {
-        // ✅ Construtor atualizado: removeu sobrenome e apelido
-        Cliente clienteBusca = new Cliente(id, 0, "null", "null", 0);
-        int index = Collections.binarySearch(clientes, clienteBusca, new ClienteIdComparator());
-        return (index >= 0) ? clientes.get(index) : null;
+        for(Cliente c : clientes){
+            if (c.getIdCliente() == id){
+                return c;
+            }
+        }
+            return null;
     }
 
     public void alterarCliente(int id, String novoNome) {
@@ -39,9 +41,9 @@ public class GerenciarCliente {
         if (cliente != null) {
             cliente.setNome(novoNome);
             salvarCliente();  // ✅ Salva após alteração
-            System.out.println("✅ Cliente alterado com sucesso: " + cliente.getNome());
+            System.out.println(" Cliente alterado com sucesso: " + cliente.getNome());
         } else {
-            System.out.println("❌ Cliente não encontrado.");
+            System.out.println(" Cliente não encontrado.");
         }
     }
 

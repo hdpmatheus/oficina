@@ -312,6 +312,23 @@ public class SistemaCentral {
                     ", Status: " + agendamento.getStatus());
         }
     }
+    public void recalcularContadoresVeiculos() {
+        int encapsulado = 0;
+        int protegido = 0;
+
+         for (Cliente cliente : gerenciarCliente.getClientes()) {
+            for (Veiculo veiculo : cliente.getVeiculos()) {
+                encapsulado++;
+                 protegido++;
+            }
+        }
+
+            // Atualiza os contadores manualmente
+        Veiculo.setContadorVeiculosEncapsulado(encapsulado);
+        Veiculo.setContadorVeiculosProtegido(protegido);
+        }
+   
+
         public void carregarEstoquePadrao() {
         estoque.criarProduto(new Produto(1, "Óleo 10W40", 20, 50.0));
         estoque.criarProduto(new Produto(2, "Filtro de óleo", 20, 30.0));

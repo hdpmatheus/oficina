@@ -11,28 +11,26 @@ public class Veiculo {
 
     // Estratégia 1: Encapsulada (private static + getter/setter)
     private static int contadorVeiculosEncapsulado = 0;
-
+    
     public static int getContadorVeiculosEncapsulado() {
         return contadorVeiculosEncapsulado;
     }
-
+    public static void setContadorVeiculosEncapsulado(int valor) {
+        contadorVeiculosEncapsulado = valor;
+    }
     public static void incrementarContadorEncapsulado() {
         contadorVeiculosEncapsulado++;
     }
 
     // Estratégia 2: Protegida (protected static direto)
-    protected static int contadorVeiculosProtegido = 0;
+    private static int contadorVeiculosProtegido = 0;
 
     public static int getContadorVeiculosProtegido() {
         return contadorVeiculosProtegido;
     }
-    
-    public static void setContadorVeiculosEncapsulado(int valor) {
-    contadorVeiculosEncapsulado = valor;
-    }
-    
+  
     public static void setContadorVeiculosProtegido(int valor) {
-    contadorVeiculosProtegido = valor;
+     contadorVeiculosProtegido = valor;
     }
 
 

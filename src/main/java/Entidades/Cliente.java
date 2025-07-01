@@ -22,6 +22,7 @@ public class Cliente extends Pessoa {
     public int getIdCliente() {
         return idCliente;
     }
+     
 
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
@@ -39,7 +40,7 @@ public class Cliente extends Pessoa {
     public List<Veiculo> getVeiculos() {
         return veiculos;
     }
-
+    
     public void adicionarVeiculo(Veiculo veiculo) {
         this.veiculos.add(veiculo);
     }

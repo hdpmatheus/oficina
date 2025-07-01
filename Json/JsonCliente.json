@@ -19,7 +19,16 @@
   {
     "idCliente": 3,
     "cpf": 1212,
-    "veiculos": [],
+    "veiculos": [
+      {
+        "placa": "xx23d",
+        "modelo": "toro",
+        "marca": "fiat",
+        "ano": 2025,
+        "tipo": "caminhonete",
+        "cor": "azul"
+      }
+    ],
     "nome": "Matheus",
     "endereco": "Campo Tijuco",
     "telefone": 31313
@@ -142,14 +151,6 @@
     "nome": "Gabriela",
     "endereco": "savassi",
     "telefone": 38208083
-  },
-  {
-    "idCliente": 1,
-    "cpf": 123456789,
-    "veiculos": [],
-    "nome": "João",
-    "endereco": "Rua A",
-    "telefone": 99999999
   },
   {
     "idCliente": 1,
