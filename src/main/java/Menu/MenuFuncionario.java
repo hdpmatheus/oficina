@@ -5,7 +5,35 @@ import java.util.Scanner;
 import Entidades.*;
 import java.util.List;
 
-public class MenuFuncionario{
+    /**
+     * Classe responsável por exibir e controlar o menu de operações disponíveis para funcionários da oficina.
+     * 
+     * Permite o acesso a funcionalidades como:
+     * <ul>
+     *     <li>Gerenciar agendamentos e avançar status</li>
+     *     <li>Cadastrar clientes e veículos</li>
+     *     <li>Agendar serviços</li>
+     *     <li>Consultar dados de clientes</li>
+     *     <li>Reservar e liberar elevadores</li>
+     *     <li>Excluir clientes</li>
+     * </ul>
+     * 
+     * Esta interface de menu é acessada após login como funcionário e interage diretamente com o {@link SistemaCentral}.
+     * 
+     * @author 
+     * Matheus Henrique de Paula <br>
+     * Felipe Alcântara Guimarães Veloso
+     */
+    public class MenuFuncionario {
+
+    /**
+     * Exibe o menu interativo de funcionário, permitindo executar as operações vinculadas
+     * ao fluxo de trabalho da oficina. A execução permanece em loop até que a opção de saída seja escolhida.
+     *
+     * @param central Instância do sistema central da oficina
+     * @param scanner Objeto Scanner para leitura de entrada do usuário
+     */
+
     public static void menuFuncionario(SistemaCentral central, Scanner scanner) {
         int opcao;
         do {
@@ -28,6 +56,12 @@ public class MenuFuncionario{
             scanner.nextLine();
 
             switch (opcao) {
+                    // Cada case implementa uma funcionalidade conforme descrito no menu
+                    // Os blocos do switch seguem organizados por área funcional:
+                    // - Agendamentos (1–3)
+                    // - Cliente e Veículo (4–7, 11)
+                    // - Elevadores (8–10)
+                    // - Sair (0)
                 case 1 -> central.listarAgendamentos();
                 case 2 -> {
                     System.out.print("ID Cliente: ");
