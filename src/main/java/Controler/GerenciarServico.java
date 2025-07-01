@@ -7,15 +7,22 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Classe responsavel por gerenciar os servicos na oficina.
- * Inclui metodos para instanciar servicos, buscar servicos por ID,
- * imprimir a lista de servicos e salvar os servicos em um arquivo JSON.
+ * Classe responsável por gerenciar os serviços da oficina mecânica.
+ * 
+ * <p>Esta classe inclui métodos para instanciar serviços fixos, buscar serviços por ID
+ * com busca binária, exibir todos os serviços, e salvar/carregar os dados usando JSON.</p>
+ * 
+ * @author Felipe Alcântara
+ * @author Matheus Henrique
  */
 public class GerenciarServico {
 
-    private Servico[] servicos = new Servico[8];  // Vetor para armazenar os 8 servicos mais comuns
+    /** Vetor que armazena os 8 serviços mais comuns da oficina */
+    private Servico[] servicos = new Servico[8];
 
-    // Construtor que instancia os servicos oferecidos pela oficina
+    /**
+     * Construtor que instancia os serviços padrão da oficina.
+     */
     public GerenciarServico() {
         servicos[0] = new Servico("Troca de oleo e filtro", 1, 120.00);
         servicos[1] = new Servico("Alinhamento e balanceamento", 2, 100.00);
@@ -27,7 +34,12 @@ public class GerenciarServico {
         servicos[7] = new Servico("Troca de bateria", 8, 250.00);
     }
 
-    // Metodo para buscar servico por ID usando busca binaria
+    /**
+     * Busca um serviço pelo seu ID utilizando busca binária.
+     * 
+     * @param id ID do serviço a ser buscado
+     * @return O serviço encontrado, ou {@code null} se não existir
+     */
     public Servico buscarServicoPorId(int id) {
         int index = Arrays.binarySearch(
             servicos,
@@ -36,13 +48,19 @@ public class GerenciarServico {
         );
         return (index >= 0) ? servicos[index] : null;
     }
-    
+
+    /**
+     * Retorna todos os serviços como uma lista.
+     * 
+     * @return Lista contendo os serviços da oficina
+     */
     public List<Servico> getServicos() {
         return Arrays.asList(servicos);
     }
 
-
-    // Metodo para imprimir os servicos armazenados no vetor
+    /**
+     * Imprime todos os serviços da oficina no console.
+     */
     public void imprimirServicos() {
         for (Servico servico : servicos) {
             System.out.println("ID: " + servico.getIdServico() +
@@ -51,14 +69,19 @@ public class GerenciarServico {
         }
     }
 
-    // Metodo para salvar os servicos em um arquivo JSON
+    /**
+     * Salva os serviços da oficina no arquivo JSON correspondente.
+     */
     public void salvarServicos() {
         List<Servico> listaServicos = Arrays.asList(servicos);
         Jsonservico.salvarServico(listaServicos);
     }
+
+    /**
+     * Carrega os serviços a partir do arquivo JSON, substituindo o vetor atual.
+     */
     public void carregarServicosDoArquivo() {
         List<Servico> lista = Jsonservico.carregarServico();
-        this.servicos = lista.toArray(new Servico[0]); // conversão de List para array
+        this.servicos = lista.toArray(new Servico[0]);
     }
-
 }
