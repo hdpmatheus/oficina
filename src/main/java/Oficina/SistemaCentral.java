@@ -17,9 +17,20 @@ import Json.Jsonelevador;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+    /**
+     * Classe principal do sistema da oficina mecânica.
+     * 
+     * Responsável por gerenciar clientes, serviços, funcionários, gerentes, agendamentos, vendas,
+     * controle de elevadores, estoque, login, balanço mensal e integração com sistema externo de pagamentos.
+     * 
+     * Também realiza controle de agendamentos, vendas com nota fiscal e manipulação de contadores e serviços padrão.
+     * 
+     * @author 
+     * Matheus Henrique de Paula <br>
+     * Felipe Alcântara Guimarães Veloso
+     */
 public class SistemaCentral {
-
+      // Atributos de controle e gerência
     private GerenciarCliente gerenciarCliente;
     private GerenciarServico gerenciarServico;
     private Estoque estoque = new Estoque();
@@ -39,7 +50,10 @@ public class SistemaCentral {
     private List<Servico> servicosPadrao = new ArrayList<>();
 
     SistemaExterno sistemaexterno = new SistemaExterno();
-
+    /**
+     * Construtor da classe. Inicializa todos os gerenciadores, carregando dados de JSON.
+     * Também instancia elevadores, lista de agendamentos e configura os adaptadores.
+     */
     public SistemaCentral() {
         this.gerenciarCliente = new GerenciarCliente();
         this.gerenciarServico = new GerenciarServico();
@@ -61,12 +75,23 @@ public class SistemaCentral {
         }
         
     }
+        /**
+         * Inicializa os 3 elevadores padrão da oficina.
+         * O terceiro é exclusivo para serviços de alinhamento e balanceamento.
+         */
         private void inicializarElevadores(){
             elevadores = new Elevador [3];
             elevadores[0] = new Elevador(1, false); // Uso geral
             elevadores[1] = new Elevador(2, false); // Uso geral
             elevadores[2] = new Elevador(3, true);  // Exclusivo para Alinhamento e Balanceamento
         }
+     /**
+     * Tenta reservar um elevador com o ID informado para um determinado veículo.
+     * 
+     * @param id ID do elevador (1 a 3)
+     * @param veiculo Veículo a ser colocado no elevador
+     * @return true se reservado com sucesso, false caso contrário
+     */
         public boolean reservarElevador(int id, Veiculo veiculo) {
             if (id < 1 || id > elevadores.length) {
                 System.out.println("❌ ID de elevador inválido.");
@@ -87,6 +112,11 @@ public class SistemaCentral {
                 return false;
             }
         }
+         /**
+         * Libera o elevador correspondente ao ID fornecido.
+         * 
+         * @param id ID do elevador a ser liberado
+         */
 
         public void liberarElevador(int id) {
             if (id < 1 || id > elevadores.length) {
@@ -101,7 +131,9 @@ public class SistemaCentral {
                 System.out.println("❌ Elevador não encontrado.");
             }
         }
-
+        /**
+     * Exibe no console os contadores de veículos (encapsulado e protegido).
+     */
         public void exibirTotalDeVeiculos(){
             System.out.println("Total de veiculos (encapsulado): " + Veiculo.getContadorVeiculosEncapsulado());
             System.out.println("Total de veículos (protegido): " + Veiculo.getContadorVeiculosProtegido());
@@ -119,6 +151,14 @@ public class SistemaCentral {
     public BalancoMensal getBalancomensal() { return balancomensal; }
     public ControleDeAcesso getControleDeAcesso() { return controledeacesso; }
 
+    /**
+     * Realiza uma venda simples com pagamento, baixa de estoque e registro.
+     * 
+     * @param idCliente ID do cliente comprador
+     * @param idProduto ID do produto vendido
+     * @param pagamento Adaptador de pagamento usado
+     */
+    
     public void realizarVenda(int idCliente, int idProduto, ProcessadorPagamento pagamento) {
         Cliente cliente = gerenciarCliente.buscarCliente(idCliente);
         Produto produto = estoque.buscarProduto(idProduto);
@@ -149,6 +189,9 @@ public class SistemaCentral {
             System.out.println("❌ Pagamento recusado.");
         }
     }
+     /**
+     * Cria um pré-agendamento no sistema com cliente, serviço, data, funcionário e veículo.
+     */
 
     public void salvarVenda() {
         Jsonvenda.salvarVendas(listaVendas);
@@ -184,6 +227,13 @@ public class SistemaCentral {
         agendamento.setVeiculo(veiculo);
         System.out.println("Pre-agendamento realizado com sucesso para " + cliente.getNome() + " no servico " + servico.getTipoServico() + " no dia: " + dataAgendamento); 
     }
+        /**
+         * Confirma um agendamento associando data, veículo e elevador.
+         * 
+         * @param idCliente ID do cliente
+         * @param dataConfirmacao Data da confirmação
+         * @param veiculo Veículo usado
+         */
 
     public Agendamento buscarAgendamentoPorIdCliente(int idCliente) {
         Agendamento agendamentoBuscado = new Agendamento(null, null, idCliente, 0, null);
@@ -198,7 +248,6 @@ public class SistemaCentral {
             System.out.println("Agendamento nao encontrado para o cliente: " + idCliente);
             return;
         }
-
         agendamento.setDataConfirmacao(dataConfirmacao);
 
         Cliente cliente = gerenciarCliente.buscarCliente(idCliente);
@@ -240,7 +289,11 @@ public class SistemaCentral {
                 ", Data Confirmacao: " + dataConfirmacao +
                 ", Status: " + agendamento.getStatus());
     }
-
+        /**
+         * Avança o estado de um agendamento para o próximo passo (ex: de "Confirmado" para "Finalizado").
+         * 
+         * @param idCliente ID do cliente
+         */
 
     public void atualizarStatusAgendamento(int idCliente) {
         Agendamento agendamento = buscarAgendamentoPorIdCliente(idCliente);
