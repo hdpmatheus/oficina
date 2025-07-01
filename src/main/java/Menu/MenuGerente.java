@@ -5,9 +5,24 @@ import Menu.MenuFuncionario;
 import java.util.Scanner;
 import Entidades.*;
 
+/**
+ * Classe responsável por exibir o menu do gerente no sistema da oficina mecânica.
+ * Permite acesso às funcionalidades adicionais como controle de estoque, balanço financeiro,
+ * gestão de colaboradores e visualização de dados estatísticos.
+ * 
+ * @author Felipe Alcantara Guimaraes Veloso
+ * @author Matheus Henrique de Paula
+ */
+public class MenuGerente {
 
-    public class MenuGerente{    
-        public static void menuGerente(SistemaCentral central, Scanner scanner) {
+    /**
+     * Exibe o menu do gerente com opções adicionais.
+     * Esse menu é chamado após o menu do funcionário para reutilizar funcionalidades.
+     * 
+     * @param central Instância do sistema central da oficina.
+     * @param scanner Scanner para entrada de dados.
+     */
+    public static void menuGerente(SistemaCentral central, Scanner scanner) {
         MenuFuncionario.menuFuncionario(central, scanner);
         int opcao;
         do {
