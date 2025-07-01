@@ -5,8 +5,27 @@ import Entidades.Produto;
 
 import java.util.Scanner;
 
+/**
+ * Classe responsável por exibir e controlar o menu de gerenciamento do estoque.
+ * 
+ * Permite ao usuário listar os produtos disponíveis, repor a quantidade de um produto,
+ * e alterar nome e preço de produtos no sistema da oficina.
+ * 
+ * Este menu é acessível normalmente por usuários com permissão de gerente.
+ * 
+ * As operações realizadas interagem diretamente com o objeto {@link Estoque}.
+ * 
+ * @author 
+ * Matheus Henrique de Paula <br>
+ * Felipe Alcântara Guimarães Veloso
+ */
 public class MenuEstoque {
 
+    /**
+     * Exibe o menu de gerenciamento de estoque e executa as operações conforme a escolha do usuário.
+     *
+     * @param estoque O estoque que será manipulado pelo menu
+     */
     public static void menu(Estoque estoque) {
         Scanner scanner = new Scanner(System.in);
         int opcao;
