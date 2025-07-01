@@ -13,9 +13,32 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe utilitária responsável pela persistência dos dados de {@link Produto} no formato JSON.
+ * 
+ * Utiliza a biblioteca Gson para serializar e desserializar a lista de produtos da oficina,
+ * permitindo a gravação e leitura do estoque entre execuções do sistema.
+ * 
+ * Arquivo utilizado:
+ * <ul>
+ *     <li>Json/JsonProduto.json</li>
+ * </ul>
+ * 
+ * É utilizada por funcionalidades de controle de estoque dentro do sistema da oficina mecânica.
+ * 
+ * @author 
+ * Matheus Henrique de Paula <br>
+ * Felipe Alcântara Guimarães Veloso
+ */
 public class Jsonproduto {
+
     public static final String caminho = "Json/JsonProduto.json";
 
+    /**
+     * Salva a lista de produtos no arquivo JSON.
+     *
+     * @param produtos Lista de produtos a ser salva
+     */
     public static void salvarProdutos(List<Produto> produtos) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(produtos);
@@ -28,6 +51,13 @@ public class Jsonproduto {
         }
     }
 
+    /**
+     * Carrega a lista de produtos a partir do arquivo JSON.
+     * 
+     * Se o arquivo não for encontrado ou ocorrer erro de leitura, retorna uma lista vazia.
+     *
+     * @return Lista de produtos carregada ou lista vazia se falhar
+     */
     public static List<Produto> carregarProdutos() {
         Gson gson = new Gson();
 
