@@ -5,7 +5,25 @@ import oficina.SistemaCentral;
 import Comparator.ClienteIdComparator;
 import java.util.*;
 
+/**
+ * Classe de testes para o sistema da oficina mecânica.
+ * <p>
+ * Executa as 18 questões previstas no projeto, abrangendo funcionalidades como:
+ * criação, edição e remoção de clientes e funcionários, ordenações com Comparator,
+ * salvamentos em JSON, uso de Iterator, BinarySearch, contadores estáticos,
+ * geração de extrato e simulação de atendimento.
+ * </p>
+ *
+ * @author Felipe Alcantara Guimaraes Veloso
+ * @author Matheus Henrique de Paula
+ */
 public class TesteSistema {
+
+    /**
+     * Método principal de execução do sistema de testes.
+     *
+     * @param args argumentos da linha de comando (não utilizados)
+     */
     public static void main(String[] args) {
         SistemaCentral central = new SistemaCentral();
 
@@ -63,11 +81,10 @@ public class TesteSistema {
         // Questão 9 - Geração de extrato de serviço
         {
             System.out.println("=== Questão 9 ===");
-            // Suponha que um agendamento tenha sido feito e confirmado
             central.listarAgendamentos(); // Simulação da verificação
         }
 
-        // Questão 10 - Incremento de contador de veículo (encapsulado e protegido)
+        // Questão 10 - Incremento de contador de veículo
         {
             System.out.println("=== Questão 10 ===");
             central.exibirTotalDeVeiculos();
@@ -92,7 +109,7 @@ public class TesteSistema {
             central.getGerenciarCliente().salvarCliente();
         }
 
-        // Questão 14 - JavaDoc (não pode ser mostrado aqui, mas deve ser gerado com `javadoc`)
+        // Questão 14 - JavaDoc
         {
             System.out.println("=== Questão 14 ===");
             System.out.println("JavaDoc deve ser gerado com a ferramenta javadoc.");
@@ -145,7 +162,7 @@ public class TesteSistema {
         {
             System.out.println("=== Questão 18 ===");
             List<Cliente> clientes = central.getGerenciarCliente().getClientes();
-            List<Servico> servicos = central.getGerenciarServico().getServicos(); // use seus serviços padrão
+            List<Servico> servicos = central.getGerenciarServico().getServicos();
 
             int atendidos = 0;
             for (Cliente cliente : clientes) {
@@ -156,15 +173,14 @@ public class TesteSistema {
                     continue;
                 }
 
-                Veiculo veiculo = cliente.getVeiculos().get(0); // usa o primeiro veículo
-                Servico servico = servicos.get(atendidos % servicos.size()); // alterna entre os serviços
-                Funcionario funcionario = central.getGerenciarFuncionario().buscarFuncionario(1); // assume um funcionário existente
+                Veiculo veiculo = cliente.getVeiculos().get(0);
+                Servico servico = servicos.get(atendidos % servicos.size());
+                Funcionario funcionario = central.getGerenciarFuncionario().buscarFuncionario(1);
                 Data data = new Data(1, 1, 2025);
 
                 central.criarPreAgendamento(cliente.getIdCliente(), servico.getIdServico(), data, funcionario.getId(), veiculo);
                 central.confirmarAgendamentoComVeiculo(cliente.getIdCliente(), data, veiculo);
 
-                // Simula geração de nota fiscal (exibe no console)
                 System.out.println("Nota Fiscal - Cliente: " + cliente.getNome());
                 System.out.println("Veículo: " + veiculo.getModelo() + ", Placa: " + veiculo.getPlaca());
                 System.out.println("Serviço: " + servico.getTipoServico() + ", Preço: R$" + servico.getPreco());
